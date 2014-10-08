@@ -1,3 +1,7 @@
+#---------- BEJEWELED BOT ----------
+# This bot was oroginally created to beat my friend at bejeweled blitz.
+# You may have to configure the game_x_pad and game_y_pad so that the bot clicks in the right area.
+
 import os, sys
 import Image, ImageGrab, ImageOps
 import time, random
@@ -23,6 +27,7 @@ color_array_blue = zeros((8, 8))
 
 error = 20
 
+# Gets the color of each gem in the 8x8 matrix
 def defineColors():
     s = screenGrab()
     for x in range(8):
@@ -39,78 +44,51 @@ def defineColors():
                 color_array_red[y,x] = -1
                 color_array_green[y,x] = -1
                 color_array_blue[y,x] = -1
-           # if r > 0 and r < 50 and g > 85 and g < 180 and b > 200 and b < 300:
-                #blue
-            #    color_array[y,x] = 1
-           # elif r > 222 and r < 300 and g > 222 and g < 300 and b > 0 and b < 70:
-                #yellow
-           #     color_array[y,x] = 2
-           # elif r > 170 and r < 222 and g > 50 and g < 100 and b > 0 and b < 50:
-                #ornage
-            #    color_array[y,x] = 3
-           #elif r > 222 and r < 300 and g > 0 and g < 50 and b > 222 and b < 300:
-                #purple
-            #    color_array[y,x] = 4
-           # elif r > 222 and r < 300 and g > 0 and g < 50 and b > 20 and b < 80:
-                #red
-            #    color_array[y,x] = 5
-           # elif r > 0 and r < 50 and g > 100 and g < 180 and b > 0 and b < 50:
-                #green
-               # color_array[y,x] = 6
-           # elif r > 222 and r < 300 and g > 222 and g < 300 and b > 222 and b < 300:
-                #white
-               # color_array[y,x] = 7
-            #else:
-                #invalid
-                #color_array[y,x] = -1
-            #color_array[y,x] = x
-            #print(color_array[y,x])
 
-
+# 'Main' Method
 def startPlaying():
     
-    
+    startTime = time.time()
     while (1):
+        #Get Gem colors
         defineColors()
-        #Horizontal Check
+        #Check for two Gems of the same color Horizontally aligned
         for y in range(8):
             for x in range(7):  
-                #if color_array[y][x] == color_array[y][x+1] #and color_array[y][x] > 0:
                 if abs(color_array_red[y][x] - color_array_red[y][x+1]) < error:
                     if abs(color_array_green[y][x] - color_array_green[y][x+1]) < error:
                         if abs(color_array_blue[y][x] - color_array_blue[y][x+1]) < error:
                     
                             adjacentHandler(y,x,"horizontal")
-        #print("1");
         time.sleep(0.1)
         defineColors()
-        #Vertical Check
+        #Check for two Gems of the same color Vertically aligned
         for x in range(8):
             for y in range(7):  
                 if abs(color_array_red[y+1][x] - color_array_red[y][x]) < error:
                     if abs(color_array_green[y+1][x] - color_array_green[y][x]) < error:
                         if abs(color_array_blue[y+1][x] - color_array_blue[y][x]) < error:
                             adjacentHandler(y,x,"vertical")
-        #print("2");
         time.sleep(0.1)
         defineColors()            
-        #two spaced half way
+        #Check for two Gems of the same color separated by one gem
         for x in range(8):
             for y in range(8):
-                #if x < 6 and color_array[y][x] == color_array[y][x+2] #and color_array[y][x] > 0:
                 if x < 6 and abs(color_array_red[y][x] - color_array_red[y][x+2]) < error:
                     if abs(color_array_green[y][x] - color_array_green[y][x+2]) < error:
                         if abs(color_array_blue[y][x] - color_array_blue[y][x+2]) < error:
                             middleHandler(y,x,"horizontal")
                 
-                #if y < 6 and color_array[y][x] == color_array[y+2][x] #and color_array[y][x] > 0:
                 if y < 6 and abs(color_array_red[y][x] - color_array_red[y+2][x]) < error:
                     if abs(color_array_green[y][x] - color_array_green[y+2][x]) < error:
                         if abs(color_array_blue[y][x] - color_array_blue[y+2][x]) < error:
                 
-                            middleHandler(y,x,"vertical")
-        #print("3");        
+                            middleHandler(y,x,"vertical")      
         time.sleep(0.1)
+
+        if(time.time() - start_Time > 60):
+            break
+        
 
 
 def adjacentHandler(y,x,direction):
